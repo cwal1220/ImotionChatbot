@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Chan/Desktop/SUMGO_NEW/ImotionChatbot/app/src/main/res/layout/activity_caledar.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/Chan/Desktop/SUMGO_NEW/ImotionChatbot/app/src/main/res/layout/activity_chat.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/Chan/Desktop/SUMGO_NEW/ImotionChatbot/app/src/main/res/layout/activity_main.xml" value="0.24479166666666666" />
+        <entry key="..\:/Users/Chan/Desktop/SUMGO_NEW/ImotionChatbot/app/src/main/res/layout/room2.xml" value="0.10740740740740741" />
+        <entry key="..\:/Users/Chan/Desktop/SUMGO_NEW/ImotionChatbot/app/src/main/res/layout/room_center_item_list.xml" value="0.180078125" />
+        <entry key="..\:/Users/Chan/Desktop/SUMGO_NEW/ImotionChatbot/app/src/main/res/layout/room_left_item_list.xml" value="0.18564356435643564" />
+        <entry key="..\:/Users/Chan/Desktop/SUMGO_NEW/ImotionChatbot/app/src/main/res/layout/room_right_item_list.xml" value="0.24114583333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
