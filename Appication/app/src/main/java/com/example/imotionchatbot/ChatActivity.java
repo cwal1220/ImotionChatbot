@@ -24,10 +24,25 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView recyvlerv;
     private Post ChattingPost;
     private String reply;
+
+    private final String ClientID = "gv6bxin5su";
+    private final String ClientSecret = "xB5jO0EAJrbBFxkwzMvAGl62dBMwdtBFeWVcNf69";
+    private final String ClientUrl="https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
+
+    private JSONObject headers = new JSONObject();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        try {
+            headers.put("X-NCP-APIGW-API-KEY-ID", ClientID);
+            headers.put("X-NCP-APIGW-API-KEY", ClientSecret);
+            headers.put("Content-Type", "application/json");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         ChattingPost = new Post("210.183.6.81", "/request/chatting");
 
