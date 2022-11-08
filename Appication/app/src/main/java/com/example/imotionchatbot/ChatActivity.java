@@ -5,21 +5,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
     private ArrayList<DataItem> dataList;
     private Button btn_send1;
     private EditText editText1;
     private RecyclerView recyvlerv;
+    private Post ChattingPost;
+    private String reply;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        ChattingPost = new Post("210.183.6.81", "/request/chatting");
 
         initData();
 
@@ -49,10 +59,36 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         switch(b.getId()) {
             case R.id.btn_send1:
                 dataList.add(new DataItem(editText1.getText().toString(),"사용자2",Code.ViewType.RIGHT_CONTENT));
-                editText1.setText("");
-                dataList.add(new DataItem("조까세요","사용자1",Code.ViewType.LEFT_CONTENT));
-                recyvlerv.setAdapter(new MyAdapter(dataList));
-                recyvlerv.scrollToPosition(dataList.size()-1);
+
+                new Thread(() -> {
+                    try {
+                        JSONObject jo = new JSONObject();
+                        jo.put("chat", editText1.getText().toString());
+
+                        JSONObject jsonObject = ChattingPost.sendPost(jo.toString());
+
+                        if (jsonObject != null) {
+                            reply = jsonObject.getString("data");
+                        }
+                        else {
+                            reply = "잘 모르겠어요 ㅠ_ㅠ";
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dataList.add(new DataItem(reply,"사용자1",Code.ViewType.LEFT_CONTENT));
+                                recyvlerv.setAdapter(new MyAdapter(dataList));
+                                recyvlerv.scrollToPosition(dataList.size()-1);
+                                editText1.setText("");
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }).start();
+
                 break;
         }
     }
