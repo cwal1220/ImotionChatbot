@@ -49,8 +49,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }else if(viewHolder instanceof LeftViewHolder){
             ((LeftViewHolder)viewHolder).textv_nicname.setText(myDataList.get(position).getName());
             ((LeftViewHolder)viewHolder).textv_msg.setText(myDataList.get(position).getContent());
+            ((LeftViewHolder)viewHolder).textv_time.setText(myDataList.get(position).getCurrentTime());
         }else{
             ((RightViewHolder)viewHolder).textv_msg.setText(myDataList.get(position).getContent());
+            ((RightViewHolder)viewHolder).textv_time.setText(myDataList.get(position).getCurrentTime());
         }
 
     }

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,10 +17,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
     private ArrayList<DataItem> dataList;
@@ -26,29 +41,19 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editText1;
     private RecyclerView recyvlerv;
     private Post ChattingPost;
+    private ClovaPost clovaPost;
     private String reply;
 
-    private final String ClientID = "gv6bxin5su";
-    private final String ClientSecret = "xB5jO0EAJrbBFxkwzMvAGl62dBMwdtBFeWVcNf69";
-    private final String ClientUrl="https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
-
-    private JSONObject headers = new JSONObject();
+    private JSONObject clovaPostParam = new JSONObject();
 
     private DBHelper dbHelper = new DBHelper(ChatActivity.this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        try {
-            headers.put("X-NCP-APIGW-API-KEY-ID", ClientID);
-            headers.put("X-NCP-APIGW-API-KEY", ClientSecret);
-            headers.put("Content-Type", "application/json");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         ChattingPost = new Post("210.183.6.81", "/request/chatting");
-
+        clovaPost = new ClovaPost();
         initData();
 
         recyvlerv = findViewById(R.id.recyvlerv);
@@ -64,10 +69,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initData(){
         dataList = new ArrayList<>();
-        dataList.add(new DataItem("시용자1님 입장했음",null,Code.ViewType.CENTER_CONTENT));
-        dataList.add(new DataItem("사용자2님 입장했음",null,Code.ViewType.CENTER_CONTENT));
-        dataList.add(new DataItem("안녕하세요11","사용자1",Code.ViewType.LEFT_CONTENT));
-        dataList.add(new DataItem("안녕하세요22","사용자2",Code.ViewType.RIGHT_CONTENT));
+        dataList.add(new DataItem("EmotionBot님 입장!",null,Code.ViewType.CENTER_CONTENT));
+        dataList.add(new DataItem("사용자님 입장!",null,Code.ViewType.CENTER_CONTENT));
+        dataList.add(new DataItem("안녕하세요! EmotionBot 입니다.","EmotionBot",Code.ViewType.LEFT_CONTENT));
     }
 
     @Override
@@ -76,7 +80,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         switch(b.getId()) {
             case R.id.btn_send1:
-                dataList.add(new DataItem(editText1.getText().toString(),"사용자2",Code.ViewType.RIGHT_CONTENT));
+                dataList.add(new DataItem(editText1.getText().toString(),"사용자",Code.ViewType.RIGHT_CONTENT));
 
                 new Thread(() -> {
                     try {
@@ -89,27 +93,25 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                             reply = jsonObject.getString("data");
                         }
                         else {
-                            reply = "잘 모르겠어요 ㅠ_ㅠ";
+                            reply = "잘 이해하지 못했어요 ㅠ_ㅠ";
                         }
 
                         // TODO: 네이버 API를 이용한 감정 파악코드 추가하기
-                        int emotionvalue = 1;
+                        clovaPostParam.put("content", reply);
+                        int clovaRet = clovaPost.sendPost(clovaPostParam.toString());
+                        Log.i("TELECHIPS", "clovaRet : " + clovaRet);
 
                         // 현재 날짜를 구해 날짜 기준을 이용해 DB에 삽입
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         Calendar c1 = Calendar.getInstance();
                         String strToday = sdf.format(c1.getTime());
                         Log.i("TELECHIPS", strToday);
-                        dbHelper.insertEmotionTable(strToday, emotionvalue);
+                        dbHelper.insertEmotionTable(strToday, clovaRet);
 
-                        // Debug
-                        double avg = dbHelper.getEmotionAverageThisWeek();
-                        Log.i("TELECHIPS", "평균 :" + avg);
-                        
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                dataList.add(new DataItem(reply,"사용자1",Code.ViewType.LEFT_CONTENT));
+                                dataList.add(new DataItem(reply,"EmotionBot",Code.ViewType.LEFT_CONTENT));
                                 recyvlerv.setAdapter(new MyAdapter(dataList));
                                 recyvlerv.scrollToPosition(dataList.size()-1);
                                 editText1.setText("");

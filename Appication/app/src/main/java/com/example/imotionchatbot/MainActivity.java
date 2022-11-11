@@ -36,9 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.allButton:
-                //Intent intent = new Intent(this, CaledarActivity.class);
-                //startActivity(intent);
+                intent = new Intent(this, TotalActivity.class);
+                startActivity(intent);
                 break;
+
             case R.id.chatButton:
                 intent = new Intent(this, ChatActivity.class);
                 startActivity(intent);

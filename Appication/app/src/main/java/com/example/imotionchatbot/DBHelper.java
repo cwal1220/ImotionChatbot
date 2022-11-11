@@ -58,15 +58,30 @@ public class DBHelper extends SQLiteOpenHelper {
         return ret;
     }
 
-    public double getEmotionAverageThisWeek() {
-        // 이번주의 감정수치 평균
+    public double getEmotionAverageThisMonth() {
+        // 이번달의 감정수치 평균
         double ret;
         SQLiteDatabase db = getWritableDatabase();
-        Cursor mCursor = db.rawQuery("SELECT avg(emotionval) FROM EMOTION WHERE strftime('%W',emotiondate)=strftime('%W', date('now'))", null);
+        Cursor mCursor = db.rawQuery("SELECT avg(emotionval) FROM EMOTION WHERE strftime('%m',emotiondate)=strftime('%m', date('now'))", null);
         mCursor.moveToNext();
         ret = mCursor.getDouble(0);
         mCursor.close();
         return ret;
+    }
+
+    public ArrayList<EmotionDAO> getEmotionThisMonth() {
+        // 이번달의 감정 수치
+        double ret;
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor mCursor = db.rawQuery("SELECT strftime('%d', emotiondate), emotionval FROM EMOTION WHERE emotiondate between strftime('%Y-%m-01', date('now')) and strftime('%Y-%m-%d', datetime(date('now'), '+1 days'))", null);
+        ArrayList<EmotionDAO> list = new ArrayList<>();
+        if(mCursor.moveToFirst()) {
+            do {
+                list.add(new EmotionDAO(mCursor.getString(0), mCursor.getInt(1)));
+            } while(mCursor.moveToNext());
+        }
+        mCursor.close();
+        return list;
     }
 
     public ArrayList<EmotionDAO> selectEmotionTable() {
