@@ -9,12 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener{
@@ -31,11 +34,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private JSONObject headers = new JSONObject();
 
+    private DBHelper dbHelper = new DBHelper(ChatActivity.this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         try {
             headers.put("X-NCP-APIGW-API-KEY-ID", ClientID);
             headers.put("X-NCP-APIGW-API-KEY", ClientSecret);
@@ -89,6 +92,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                             reply = "잘 모르겠어요 ㅠ_ㅠ";
                         }
 
+                        // TODO: 네이버 API를 이용한 감정 파악코드 추가하기
+                        int emotionvalue = 1;
+
+                        // 현재 날짜를 구해 날짜 기준을 이용해 DB에 삽입
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Calendar c1 = Calendar.getInstance();
+                        String strToday = sdf.format(c1.getTime());
+                        Log.i("TELECHIPS", strToday);
+                        dbHelper.insertEmotionTable(strToday, emotionvalue);
+
+                        // Debug
+                        double avg = dbHelper.getEmotionAverageThisWeek();
+                        Log.i("TELECHIPS", "평균 :" + avg);
+                        
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
