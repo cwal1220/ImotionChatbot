@@ -33,7 +33,7 @@ public class TotalActivity extends AppCompatActivity {
 
         ArrayList<EmotionDAO> emotionDAOS = dbHelper.getEmotionThisMonth();
         double averageThisMonth = dbHelper.getEmotionAverageThisMonth();
-        emotionAvgView.setText(averageThisMonth + "점");
+        emotionAvgView.setText(String.format("%.2f", averageThisMonth) + "점");
 
         List<Entry> entries = new ArrayList<>();
 

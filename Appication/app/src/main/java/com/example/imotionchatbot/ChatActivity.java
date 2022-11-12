@@ -84,8 +84,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                 new Thread(() -> {
                     try {
+                        String userMessage = editText1.getText().toString();
                         JSONObject jo = new JSONObject();
-                        jo.put("chat", editText1.getText().toString());
+                        jo.put("chat", userMessage);
 
                         JSONObject jsonObject = ChattingPost.sendPost(jo.toString());
 
@@ -97,7 +98,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                         // TODO: 네이버 API를 이용한 감정 파악코드 추가하기
-                        clovaPostParam.put("content", reply);
+                        clovaPostParam.put("content", userMessage);
                         int clovaRet = clovaPost.sendPost(clovaPostParam.toString());
                         Log.i("TELECHIPS", "clovaRet : " + clovaRet);
 
