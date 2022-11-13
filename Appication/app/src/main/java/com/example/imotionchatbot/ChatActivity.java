@@ -69,9 +69,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initData(){
         dataList = new ArrayList<>();
-        dataList.add(new DataItem("EmotionBot님 입장!",null,Code.ViewType.CENTER_CONTENT));
+        dataList.add(new DataItem("Ary님 입장!",null,Code.ViewType.CENTER_CONTENT));
         dataList.add(new DataItem("사용자님 입장!",null,Code.ViewType.CENTER_CONTENT));
-        dataList.add(new DataItem("안녕하세요! EmotionBot 입니다.","EmotionBot",Code.ViewType.LEFT_CONTENT));
+        dataList.add(new DataItem("안녕하세요! Ary 입니다.","Ary",Code.ViewType.LEFT_CONTENT));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                dataList.add(new DataItem(reply,"EmotionBot",Code.ViewType.LEFT_CONTENT));
+                                dataList.add(new DataItem(reply,"Ary",Code.ViewType.LEFT_CONTENT));
                                 recyvlerv.setAdapter(new MyAdapter(dataList));
                                 recyvlerv.scrollToPosition(dataList.size()-1);
                                 editText1.setText("");
