@@ -4,7 +4,7 @@ import time
 # db = db_requester('http://49.236.136.179:5000')
 # print(db.request('request/car', {'id': 'cshyeon'}))
 
-db = db_requester('http://192.168.0.2:3004')
+db = db_requester('http://138.2.126.137:3005')
 print(db.request('/request/chatting', {'chat':'아 자살하고싶다..'}))
 
 #print(db.request('/update/reservations', {'res_id':'123123_99', 'bus_id':"99", 'std_id':'123123'}))

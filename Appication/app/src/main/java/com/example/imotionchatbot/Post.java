@@ -25,7 +25,7 @@ public class Post {
     public JSONObject sendPost(String params)
     {
         try {
-            URL url = new URL("http://" + ip + ":3004/" + path);
+            URL url = new URL("http://" + ip + ":3005/" + path);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.setRequestMethod("POST");
@@ -33,7 +33,7 @@ public class Post {
             connection.setRequestProperty("Accept", "application/json; charset=utf-8");
             connection.setDoInput(true);
             connection.setDoOutput(true);
-            connection.setReadTimeout(1000);
+            connection.setReadTimeout(15000);
             connection.setConnectTimeout(1500);
 
             // Send Data

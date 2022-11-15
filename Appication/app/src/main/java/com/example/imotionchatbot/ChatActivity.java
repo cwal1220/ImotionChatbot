@@ -52,7 +52,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        ChattingPost = new Post("210.183.6.81", "/request/chatting");
+        ChattingPost = new Post("138.2.126.137", "/request/chatting");
         clovaPost = new ClovaPost();
         initData();
 
